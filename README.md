@@ -13,5 +13,5 @@ Página con todas las versiones: **https://imprezwag.github.io/3d/**
 ## Cómo se organiza el repo
 
 - Cada versión vive en su propia carpeta (`v1.1/`, `v2.0/`, ...) con su visor 3D (`index.html`), sus STL, su modelo paramétrico y su README.
-- Cada versión publicada tiene una etiqueta de git con el mismo nombre (`v1.1`).
+- Cada versión publicada puede marcarse además como release en GitHub (Releases → Draft a new release, con la etiqueta `v1.1`), para guardar ese estado exacto.
 - La página de inicio (`index.html` en la raíz) lista todas las versiones. Al sumar una versión nueva, se agrega su tarjeta ahí y su fila en esta tabla.
