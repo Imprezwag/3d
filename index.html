@@ -34,6 +34,7 @@ h1 { font-weight: 700; font-size: 1.9rem; letter-spacing: -0.01em; margin: 0; te
 .top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 h2 { margin: 0; font-size: 1.35rem; font-weight: 700; }
 .tag { font-family: var(--f-data); font-size: 0.75rem; color: var(--petg); border: 1px solid var(--petg); border-radius: 999px; padding: 1px 8px; }
+.tag.old { color: var(--muted); border-color: var(--line); }
 .date { font-family: var(--f-data); font-size: 0.8rem; color: var(--muted); }
 p { margin: 0; }
 ul { margin: 0; padding-left: 1.1em; display: grid; gap: 3px; color: var(--muted); }
@@ -56,11 +57,33 @@ footer a { color: inherit; }
 
   <div class="list">
     <article class="ver">
+      <img src="v2.0/imagenes/vista_costado.png" alt="Corte de costado del soporte V2.0 montado en el bidón, con la botella de 1,5 L">
+      <div class="body">
+        <div class="top">
+          <h2>V2.0</h2>
+          <span class="tag">actual</span>
+          <span class="date">17/10/2026</span>
+        </div>
+        <p>Abraza el cuello del bidón y se recuesta contra su parte más ancha, así que no depende del mueble. La cuna encastra con un clic, sin bulones.</p>
+        <ul>
+          <li>Cualquier bidón retornable de 20 L (cuello de 55 mm)</li>
+          <li>3 piezas en PETG, más suplementos y reductores de la V1.1</li>
+          <li>Boca 10 mm adelante y 22 mm abajo del pico</li>
+        </ul>
+        <div class="actions">
+          <a class="btn primary" href="v2.0/">Abrir visor 3D</a>
+          <a class="btn" href="https://github.com/Imprezwag/3d/tree/main/v2.0/stl">Archivos STL</a>
+          <a class="btn" href="https://github.com/Imprezwag/3d/tree/main/v2.0">Detalles</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="ver">
       <img src="v1.1/imagenes/vista_costado.png" alt="Vista de costado del soporte V1.1 con botellas de 1,5 L, 1 L y 500 ml">
       <div class="body">
         <div class="top">
           <h2>V1.1</h2>
-          <span class="tag">actual</span>
+          <span class="tag old">anterior</span>
           <span class="date">17/10/2026</span>
         </div>
         <p>Se cuelga de la tabla frontal del mueble. La botella apoya en una copa y en un aro en C, inclinada 30° y con la boca pegada al pico.</p>

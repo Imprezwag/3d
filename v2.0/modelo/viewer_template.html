@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*{box-sizing:border-box} body{margin:0}</style>
+<title>Soporte del bidón V2.0</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: herramienta de una columna; visor 3D arriba, ficha técnica abajo en columnas que se apilan en el teléfono */
+:root {
+  --bg: #F3F6F7; --surface: #FFFFFF; --ink: #15222A; --muted: #5B6B73; --line: #D5DEE2;
+  --water: #2F7FD1; --petg: #17936E; --jug: #8FB8DA; --pump: #E9EDEF;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F171B; --surface: #172227; --ink: #E4ECEF; --muted: #93A5AD; --line: #2A3A41;
+  --water: #5AA2EA; --petg: #33B98F; --jug: #4E7FA8; --pump: #C9D1D5; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0F171B; --surface: #172227; --ink: #E4ECEF; --muted: #93A5AD; --line: #2A3A41;
+  --water: #5AA2EA; --petg: #33B98F; --jug: #4E7FA8; --pump: #C9D1D5; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; }
+.wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 20px; }
+header { display: grid; gap: 4px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: 1.7rem; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: 0; max-width: 64ch; }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: grid; }
+#view { width: 100%; height: min(62vh, 540px); min-height: 320px; display: block; touch-action: none; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px; border-top: 1px solid var(--line); }
+.bar .lbl { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 4px; }
+.bar .sep { width: 1px; height: 22px; background: var(--line); margin: 0 6px; }
+button.opt { font: 500 0.95rem var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+button.opt[aria-pressed="true"] { background: var(--petg); border-color: var(--petg); color: #fff; }
+button.opt:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+.hint { margin-left: auto; font-size: 0.8rem; color: var(--muted); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+section { display: grid; gap: 10px; min-width: 0; align-content: start; }
+h2 { font-family: var(--f-display); font-size: 1.05rem; font-weight: 700; margin: 0; }
+dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; }
+dt { color: var(--muted); }
+dd { margin: 0; font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+th, td { text-align: left; padding: 7px 8px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+td.n { font-family: var(--f-data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl { overflow-x: auto; }
+ul, ol { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p style="margin:0"><a href="../" style="color:var(--muted)">← Todas las versiones</a></p>
+    <h1>Soporte del bidón <span style="color:var(--muted);font-weight:500">V2.0</span></h1>
+    <p class="sub">Abraza el cuello del bidón y se recuesta contra su parte más ancha, así no depende del mueble. La botella apoya la base en la copa y el cuerpo en el aro en C.</p>
+  </header>
+
+  <div class="stage">
+    <canvas id="view" aria-label="Modelo 3D del soporte montado en el bidón, con la bomba y la botella"></canvas>
+    <div class="bar">
+      <span class="lbl">Botella</span>
+      <button class="opt" id="b15" aria-pressed="true">1,5 L</button>
+      <button class="opt" id="b1" aria-pressed="false">1 L</button>
+      <button class="opt" id="b05" aria-pressed="false">500 ml</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="opt" id="sep" aria-pressed="false">Separar la cuna</button>
+      <span class="hint">Arrastrá para girar, pellizcá para acercar</span>
+    </div>
+  </div>
+
+  <div class="cols">
+    <section>
+      <h2>Cómo queda</h2>
+      <dl>
+        <dt>Punta del pico</dt><dd>120 mm del eje, 110 mm arriba</dd>
+        <dt>Boca vs. pico</dt><dd id="boca">10 mm adelante, 22 mm abajo</dd>
+        <dt>Inclinación</dt><dd>30° de la vertical</dd>
+        <dt>Cuello</dt><dd>Ø55 mm, 30 mm libres</dd>
+        <dt>Apoyo</dt><dd>contra Ø270 mm del bidón</dd>
+      </dl>
+      <ul>
+        <li><span class="swatch" style="background:var(--petg)"></span>Soporte impreso</li>
+        <li><span class="swatch" style="background:var(--jug)"></span>Bidón y bomba</li>
+        <li><span class="swatch" style="background:var(--water)"></span>Botella y chorro</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Cómo se pone</h2>
+      <ol>
+        <li>Sacá la bomba y bajá el collar por el cuello del bidón.</li>
+        <li>Volvé a poner la bomba.</li>
+        <li>Girá el collar hasta que el brazo quede debajo del pico.</li>
+        <li>Apretá a mano el tornillo de atrás, sin forzar.</li>
+        <li>Bajá la cuna sobre la lengüeta hasta que haga clic.</li>
+      </ol>
+      <p class="sub">Para cambiar el bidón: sacás la cuna, la bomba y el collar, y repetís.</p>
+    </section>
+    <section>
+      <h2>Para quien lo imprima</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>Pieza</th><th>Medida (mm)</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td>Collar</td><td class="n">208×68×117</td><td>Siempre</td></tr>
+          <tr><td>Cuna</td><td class="n">150×106×199</td><td>Siempre</td></tr>
+          <tr><td>Tornillo trasero</td><td class="n">Ø26×27</td><td>Siempre</td></tr>
+          <tr><td>Suplemento A</td><td class="n">Ø94×60</td><td>1 L y 500 ml</td></tr>
+          <tr><td>Suplemento B</td><td class="n">Ø86×40</td><td>500 ml, encima del A</td></tr>
+          <tr><td>Reductores de aro</td><td class="n">106×61×20</td><td>1 L o 500 ml</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li>PETG, boquilla 0,4, capa 0,2 mm, 4 perímetros, 25 % de relleno giroide.</li>
+        <li>La cuna se imprime con la copa sobre la cama y necesita 200 mm de altura. El collar, boca abajo. Los dos con soportes tipo árbol.</li>
+        <li>El tornillo, parado con la perilla arriba. Suplementos y reductores, los de la V1.1.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+<script>
+__DATA__</script>
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const canvas = document.getElementById("view");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 1, 6000);
+camera.up.set(0, 0, 1);
+camera.position.set(560, -620, 240);
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.target.set(90, 0, -40);
+controls.enableDamping = true;
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8899aa, 0.75));
+const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(300, -400, 500); scene.add(sun);
+const fill = new THREE.DirectionalLight(0xffffff, 0.3); fill.position.set(-300, 300, 100); scene.add(fill);
+
+const mats = {
+  petg: new THREE.MeshStandardMaterial({ roughness: 0.45 }),
+  petgLight: new THREE.MeshStandardMaterial({ roughness: 0.5, transparent: true, opacity: 0.85 }),
+  jug: new THREE.MeshStandardMaterial({ roughness: 0.2, transparent: true, opacity: 0.3, depthWrite: false, side: THREE.DoubleSide }),
+  pump: new THREE.MeshStandardMaterial({ roughness: 0.35 }),
+  black: new THREE.MeshStandardMaterial({ color: 0x1d2327, roughness: 0.3 }),
+  grey: new THREE.MeshStandardMaterial({ color: 0x8d969b, roughness: 0.5 }),
+  water: new THREE.MeshStandardMaterial({ roughness: 0.15, transparent: true, opacity: 0.28, depthWrite: false, side: THREE.DoubleSide }),
+  stream: new THREE.MeshStandardMaterial({ roughness: 0.2 }),
+  metal: new THREE.MeshStandardMaterial({ color: 0xaab2b7, metalness: 0.7, roughness: 0.3 }),
+};
+function recolor() {
+  mats.petg.color.set(css("--petg")); mats.petgLight.color.set(css("--petg"));
+  mats.jug.color.set(css("--jug")); mats.pump.color.set(css("--pump"));
+  mats.water.color.set(css("--water")); mats.stream.color.set(css("--water"));
+}
+recolor();
+
+const loader = new THREE.STLLoader();
+function stl(b64, mat) {
+  const bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer;
+  const g = loader.parse(bin); g.computeVertexNormals();
+  return new THREE.Mesh(g, mat);
+}
+const collar = stl(D.collar, mats.petg); scene.add(collar);
+scene.add(stl(D.tornillo, mats.petg));
+const cunaGroup = new THREE.Group(); scene.add(cunaGroup);
+cunaGroup.add(stl(D.cuna, mats.petg));
+const supA = stl(D.supA, mats.petgLight), supB = stl(D.supB, mats.petgLight);
+const red1 = stl(D.red1, mats.petgLight), red05 = stl(D.red05, mats.petgLight);
+[supA, supB, red1, red05].forEach(m => cunaGroup.add(m));
+
+// Bidón (perfil estándar de 20 L, hombro estimado) y bomba
+function lathe(pts, mat, seg = 64) {
+  const g = new THREE.LatheGeometry(pts.map(([r, z]) => new THREE.Vector2(r, z)), seg);
+  g.rotateX(Math.PI / 2); return new THREE.Mesh(g, mat);
+}
+const jugPts = [[0, -380], [135, -380], [135, -95]];
+for (let i = 1; i <= 24; i++) { const f = Math.PI / 2 * i / 24; jugPts.push([27.5 + 107.5 * Math.cos(f), -95 * (1 - Math.sin(f))]); }
+jugPts.push([27.5, 30]);
+scene.add(lathe(jugPts, mats.jug));
+scene.add(lathe([[0, 30], [31, 30], [31, 47], [0, 47]], mats.grey, 48));
+scene.add(lathe([[0, 47], [34, 47], [34, 72], [0, 72]], mats.black, 48));
+scene.add(lathe([[0, 72], [35, 72], [35, 196], [30, 202], [0, 202]], mats.pump, 48));
+const [PX, PZ] = D.pico;
+const spoutPath = new THREE.CatmullRomCurve3([[33, 0, 82], [60, 0, 101], [86, 0, 118], [108, 0, 117], [120, 0, 110]].map(p => new THREE.Vector3(...p)));
+scene.add(new THREE.Mesh(new THREE.TubeGeometry(spoutPath, 40, 4, 12, false), mats.metal));
+
+// Botella
+const th = D.incl * Math.PI / 180;
+const U = new THREE.Vector3(-Math.sin(th), 0, Math.cos(th));
+const B = new THREE.Vector3(...D.B);
+const bottles = {
+  b15: { h: 320, d: 90, base: 0, show: [] },
+  b1: { h: 258, d: 83, base: 60, show: [supA, red1] },
+  b05: { h: 220, d: 68, base: 100, show: [supA, supB, red05] },
+};
+const bottleGroup = new THREE.Group(); bottleGroup.position.copy(B); bottleGroup.rotation.y = -th; cunaGroup.add(bottleGroup);
+let bottleMesh = null, streamMesh = null, current = "b15", separated = false;
+function bottleGeom(h, d) {
+  const r = d / 2, rn = 14, sh = h * 0.68, nk = h * 0.86;
+  const pts = [[0, 0], [r - 6, 0], [r, 6], [r, sh], [rn + 2, nk], [rn, nk + 4], [rn, h], [0, h]].map(([x, y]) => new THREE.Vector2(x, y));
+  const g = new THREE.LatheGeometry(pts, 48); g.rotateX(Math.PI / 2); return g;
+}
+function setBottle(key) {
+  current = key; const b = bottles[key];
+  if (bottleMesh) { bottleGroup.remove(bottleMesh); bottleMesh.geometry.dispose(); }
+  bottleMesh = new THREE.Mesh(bottleGeom(b.h, b.d), mats.water);
+  bottleMesh.position.set(0, 0, b.base); bottleMesh.renderOrder = 2; bottleGroup.add(bottleMesh);
+  [supA, supB, red1, red05].forEach(m => m.visible = b.show.includes(m));
+  const mouth = B.clone().addScaledVector(U, b.base + b.h);
+  if (streamMesh) { scene.remove(streamMesh); streamMesh.geometry.dispose(); }
+  const curve = new THREE.QuadraticBezierCurve3(new THREE.Vector3(PX, 0, PZ - 2),
+    new THREE.Vector3(PX + 6, 0, (PZ + mouth.z) / 2 + 3), new THREE.Vector3(mouth.x, 0, mouth.z + 4));
+  streamMesh = new THREE.Mesh(new THREE.TubeGeometry(curve, 24, 2.2, 8, false), mats.stream);
+  streamMesh.visible = !separated; scene.add(streamMesh);
+  document.getElementById("boca").textContent = `${Math.round(mouth.x - PX)} mm adelante, ${Math.round(PZ - mouth.z)} mm abajo`;
+  ["b15", "b1", "b05"].forEach(k => document.getElementById(k).setAttribute("aria-pressed", String(k === key)));
+}
+["b15", "b1", "b05"].forEach(k => document.getElementById(k).addEventListener("click", () => setBottle(k)));
+setBottle("b15");
+
+// Separar la cuna: baja a lo largo de la lengüeta para mostrar el encastre
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const OFF = U.clone().multiplyScalar(-90);
+let k = 0, kTarget = 0;
+document.getElementById("sep").addEventListener("click", e => {
+  separated = !separated; kTarget = separated ? 1 : 0;
+  e.currentTarget.setAttribute("aria-pressed", String(separated));
+  if (streamMesh) streamMesh.visible = !separated;
+  if (still) k = kTarget;
+});
+
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight, pr = renderer.getPixelRatio();
+  if (canvas.width !== Math.round(w * pr) || canvas.height !== Math.round(h * pr)) {
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+}
+const mq = matchMedia("(prefers-color-scheme: dark)");
+mq.addEventListener ? mq.addEventListener("change", recolor) : mq.addListener(recolor);
+new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+(function loop() {
+  k += (kTarget - k) * 0.12;
+  cunaGroup.position.copy(OFF).multiplyScalar(k);
+  resize(); controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop);
+})();
+</script>
+
+</body>
+</html>

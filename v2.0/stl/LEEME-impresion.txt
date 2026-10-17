@@ -1,0 +1,29 @@
+SOPORTE DEL BIDÓN V2.0 - NOTA PARA IMPRIMIR
+
+Material: PETG (aguanta humedad; PLA también sirve pero se ablanda al sol o con calor).
+Boquilla 0,4 mm, capa 0,2 mm, 4 perímetros, 25 % de relleno giroide.
+Todas las piezas entran en una cama de 220 x 220 mm.
+La cuna mide 199 mm de alto: la impresora necesita al menos 200 mm de altura.
+
+Piezas:
+1. collar.stl (208 x 68 x 117 mm). Ya viene orientado: boca abajo.
+   Necesita soportes tipo árbol (anillo y agujero del tornillo).
+2. cuna.stl (150 x 106 x 199 mm). Ya viene orientada: la copa va sobre la cama.
+   Necesita soportes tipo árbol debajo del aro y del apoyo.
+3. tornillo_trasero.stl (diámetro 26 x 27 mm). Perilla sobre la cama, sin soportes.
+4. suplemento_A_60mm.stl (diámetro 94 x 60 mm). Para botellas de 1 L y de 500 ml.
+5. suplemento_B_40mm.stl (diámetro 86 x 40 mm). Para 500 ml, va encima del A.
+6. reductor_aro_1L.stl. Se calza dentro del aro en C para botellas de 1 L.
+7. reductor_aro_500ml.stl. Se calza dentro del aro en C para botellas de 500 ml.
+Las piezas 3 a 7 se imprimen tal como vienen, sin soportes.
+
+Uso:
+- 1,5 L: collar + cuna + tornillo.
+- 1 L: además, suplemento A en la copa + reductor de 1 L en el aro.
+- 500 ml: además, suplemento A + suplemento B encima + reductor de 500 ml en el aro.
+
+La rosca del tornillo es impresa (M12 x 1,75). Si queda dura, enroscarlo y desenroscarlo
+un par de veces antes de montar.
+
+soporte_v2.py es el modelo paramétrico (Python con manifold3d). Cambiando los números
+del principio se regeneran todas las piezas.

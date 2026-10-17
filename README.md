@@ -8,7 +8,8 @@ Página con todas las versiones: **https://imprezwag.github.io/3d/**
 
 | Versión | Fecha | Descripción | Visor 3D | Archivos |
 |---|---|---|---|---|
-| **V1.1** (actual) | 17/10/2026 | Se cuelga de la tabla frontal del mueble; botella en copa y aro en C, boca pegada al pico | [Abrir](https://imprezwag.github.io/3d/v1.1/) | [v1.1/](v1.1/) |
+| **V2.0** (actual) | 17/10/2026 | Abraza el cuello del bidón y se apoya en su parte más ancha; no depende del mueble. Cuna que encastra con un clic | [Abrir](https://imprezwag.github.io/3d/v2.0/) | [v2.0/](v2.0/) |
+| V1.1 | 17/10/2026 | Se cuelga de la tabla frontal del mueble; botella en copa y aro en C, boca pegada al pico | [Abrir](https://imprezwag.github.io/3d/v1.1/) | [v1.1/](v1.1/) |
 
 ## Cómo se organiza el repo
 
