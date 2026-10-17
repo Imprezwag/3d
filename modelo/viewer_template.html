@@ -1,0 +1,211 @@
+<title>Soporte del bidón</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: herramienta de una columna; visor 3D arriba, ficha técnica abajo en dos columnas que se apilan en el teléfono */
+:root {
+  --bg: #F3F6F7; --surface: #FFFFFF; --ink: #15222A; --muted: #5B6B73; --line: #D5DEE2;
+  --water: #2F7FD1; --petg: #17936E; --wood: #C9934A;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F171B; --surface: #172227; --ink: #E4ECEF; --muted: #93A5AD; --line: #2A3A41;
+  --water: #5AA2EA; --petg: #33B98F; --wood: #D9A65C; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0F171B; --surface: #172227; --ink: #E4ECEF; --muted: #93A5AD; --line: #2A3A41;
+  --water: #5AA2EA; --petg: #33B98F; --wood: #D9A65C; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; }
+.wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 20px; }
+header { display: grid; gap: 4px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: 1.7rem; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: 0; max-width: 62ch; }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: grid; }
+#view { width: 100%; height: min(62vh, 520px); min-height: 320px; display: block; touch-action: none; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px; border-top: 1px solid var(--line); }
+.bar .lbl { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 4px; }
+button.opt { font: 500 0.95rem var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+button.opt[aria-pressed="true"] { background: var(--petg); border-color: var(--petg); color: #fff; }
+button.opt:focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+.hint { margin-left: auto; font-size: 0.8rem; color: var(--muted); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+section { display: grid; gap: 10px; min-width: 0; }
+h2 { font-family: var(--f-display); font-size: 1.05rem; font-weight: 700; margin: 0; }
+dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; }
+dt { color: var(--muted); }
+dd { margin: 0; font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+th, td { text-align: left; padding: 7px 8px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+td.n { font-family: var(--f-data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl { overflow-x: auto; }
+ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: baseline; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Soporte del bidón</h1>
+    <p class="sub">Se cuelga de la tabla frontal del mueble y sostiene la botella inclinada debajo del pico de la bomba. La base apoya en la copa y el cuerpo en el aro en C; el cuello no carga peso.</p>
+  </header>
+
+  <div class="stage">
+    <canvas id="view" aria-label="Modelo 3D del soporte con la botella y la tabla del mueble"></canvas>
+    <div class="bar" role="group" aria-label="Botella">
+      <span class="lbl">Botella</span>
+      <button class="opt" id="b15" aria-pressed="true">1,5 L</button>
+      <button class="opt" id="b1" aria-pressed="false">1 L</button>
+      <button class="opt" id="b05" aria-pressed="false">500 ml</button>
+      <span class="hint">Arrastrá para girar, pellizcá para acercar</span>
+    </div>
+  </div>
+
+  <div class="cols">
+    <section>
+      <h2>Cómo queda</h2>
+      <dl>
+        <dt>Ubicación</dt><dd>a 14 cm del poste derecho</dd>
+        <dt>Inclinación</dt><dd>30° de la vertical</dd>
+        <dt>Boca vs. pico</dt><dd id="boca">10 mm adelante, 22 mm abajo</dd>
+        <dt>Tabla frontal</dt><dd>18–20 × 70 mm</dd>
+        <dt>Pico</dt><dd>237 mm arriba, 50 mm adentro</dd>
+      </dl>
+      <ul>
+        <li><span class="swatch" style="background:var(--petg)"></span>Soporte y suplementos</li>
+        <li><span class="swatch" style="background:var(--wood)"></span>Tabla frontal del mueble</li>
+        <li><span class="swatch" style="background:var(--water)"></span>Botella y chorro</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Para quien lo imprima</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>Pieza</th><th>Medida</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td>Soporte principal</td><td class="n">162×105×172</td><td>Siempre</td></tr>
+          <tr><td>Suplemento A</td><td class="n">Ø94×60</td><td>1 L y 500 ml</td></tr>
+          <tr><td>Suplemento B</td><td class="n">Ø86×40</td><td>500 ml, encima del A</td></tr>
+          <tr><td>Reductor aro 1 L</td><td class="n">106×61×20</td><td>1 L</td></tr>
+          <tr><td>Reductor aro 500 ml</td><td class="n">106×61×20</td><td>500 ml</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li>PETG, boquilla 0,4, capa 0,2 mm, 4 perímetros, 25 % de relleno giroide.</li>
+        <li>El soporte principal va con el piso de la copa sobre la cama (ya viene orientado). Necesita soportes tipo árbol debajo del aro y del gancho.</li>
+        <li>Las demás piezas se imprimen sin soportes, tal como vienen.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+<script>
+const D = __DATA__;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const canvas = document.getElementById("view");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 1, 5000);
+camera.up.set(0, 0, 1);
+camera.position.set(520, 330, 260);
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.target.set(40, 0, 50);
+controls.enableDamping = true;
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8899aa, 0.75));
+const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(300, -200, 500); scene.add(sun);
+const fill = new THREE.DirectionalLight(0xffffff, 0.3); fill.position.set(-300, 300, 100); scene.add(fill);
+
+const mats = {};
+function makeMats() {
+  mats.petg = mats.petg || new THREE.MeshStandardMaterial({ roughness: 0.45, metalness: 0.0 });
+  mats.petgLight = mats.petgLight || new THREE.MeshStandardMaterial({ roughness: 0.5, transparent: true, opacity: 0.85 });
+  mats.wood = mats.wood || new THREE.MeshStandardMaterial({ roughness: 0.8 });
+  mats.water = mats.water || new THREE.MeshStandardMaterial({ roughness: 0.15, transparent: true, opacity: 0.28, depthWrite: false, side: THREE.DoubleSide });
+  mats.stream = mats.stream || new THREE.MeshStandardMaterial({ roughness: 0.2 });
+  mats.metal = mats.metal || new THREE.MeshStandardMaterial({ color: 0x9aa3a8, metalness: 0.7, roughness: 0.3 });
+  mats.petg.color.set(css("--petg")); mats.petgLight.color.set(css("--petg"));
+  mats.wood.color.set(css("--wood")); mats.water.color.set(css("--water")); mats.stream.color.set(css("--water"));
+}
+makeMats();
+
+const loader = new THREE.STLLoader();
+function stl(b64, mat) {
+  const bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer;
+  const g = loader.parse(bin); g.computeVertexNormals();
+  return new THREE.Mesh(g, mat);
+}
+const principal = stl(D.principal, mats.petg); scene.add(principal);
+const supA = stl(D.supA, mats.petgLight); const supB = stl(D.supB, mats.petgLight);
+const red1 = stl(D.red1, mats.petgLight); const red05 = stl(D.red05, mats.petgLight);
+[supA, supB, red1, red05].forEach(m => scene.add(m));
+
+// tabla frontal y poste derecho
+const [T, H] = D.tabla;
+const board = new THREE.Mesh(new THREE.BoxGeometry(T, 320, H), mats.wood);
+board.position.set(-T / 2, 140 - 160, -H / 2); scene.add(board);
+const post = new THREE.Mesh(new THREE.BoxGeometry(45, 45, 220), mats.wood);
+post.position.set(-22.5, 140 + 22.5, -100); scene.add(post);
+
+// pico
+const [PX, PZ] = D.pico;
+const spout = new THREE.Mesh(new THREE.CylinderGeometry(4, 4, 70, 16), mats.metal);
+spout.rotation.z = Math.PI / 2; spout.rotation.y = 0.35;
+spout.position.set(PX - 32, 0, PZ + 14); scene.add(spout);
+const tip = new THREE.Mesh(new THREE.CylinderGeometry(4, 4, 22, 16), mats.metal);
+tip.rotation.x = Math.PI / 2; tip.position.set(PX, 0, PZ + 10); scene.add(tip);
+
+// botella
+const th = D.incl * Math.PI / 180;
+const U = new THREE.Vector3(-Math.sin(th), 0, Math.cos(th));
+const B = new THREE.Vector3(...D.B);
+const bottles = {
+  b15: { h: 320, d: 90, base: 0, show: [] },
+  b1: { h: 258, d: 83, base: 55, show: [supA, red1] },
+  b05: { h: 220, d: 68, base: 90, show: [supA, supB, red05] },
+};
+const bottleGroup = new THREE.Group(); bottleGroup.position.copy(B); bottleGroup.rotation.y = -th; scene.add(bottleGroup);
+let bottleMesh = null, streamMesh = null;
+function bottleGeom(h, d) {
+  const r = d / 2, rn = 14, sh = h * 0.68, nk = h * 0.86;
+  const pts = [[0, 0], [r - 6, 0], [r, 6], [r, sh], [rn + 2, nk], [rn, nk + 4], [rn, h], [0, h]]
+    .map(([x, y]) => new THREE.Vector2(x, y));
+  const g = new THREE.LatheGeometry(pts, 48); g.rotateX(Math.PI / 2); return g;
+}
+function setBottle(key) {
+  const b = bottles[key];
+  if (bottleMesh) { bottleGroup.remove(bottleMesh); bottleMesh.geometry.dispose(); }
+  bottleMesh = new THREE.Mesh(bottleGeom(b.h, b.d), mats.water);
+  bottleMesh.position.set(0, 0, b.base); bottleMesh.renderOrder = 2; bottleGroup.add(bottleMesh);
+  [supA, supB, red1, red05].forEach(m => m.visible = b.show.includes(m));
+  const mouth = B.clone().addScaledVector(U, b.base + b.h);
+  if (streamMesh) { scene.remove(streamMesh); streamMesh.geometry.dispose(); }
+  const curve = new THREE.QuadraticBezierCurve3(new THREE.Vector3(PX, 0, PZ - 1),
+    new THREE.Vector3(PX + 5, 0, (PZ + mouth.z) / 2 + 4), new THREE.Vector3(mouth.x, 0, mouth.z + 6));
+  streamMesh = new THREE.Mesh(new THREE.TubeGeometry(curve, 24, 2.2, 8, false), mats.stream); scene.add(streamMesh);
+  document.getElementById("boca").textContent =
+    `${Math.round(mouth.x - PX)} mm adelante, ${Math.round(PZ - mouth.z)} mm abajo`;
+  ["b15", "b1", "b05"].forEach(k => document.getElementById(k).setAttribute("aria-pressed", String(k === key)));
+}
+["b15", "b1", "b05"].forEach(k => document.getElementById(k).addEventListener("click", () => setBottle(k)));
+setBottle("b15");
+
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== Math.round(w * renderer.getPixelRatio()) || canvas.height !== Math.round(h * renderer.getPixelRatio())) {
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+}
+const mq = matchMedia("(prefers-color-scheme: dark)");
+const recolor = () => makeMats();
+mq.addEventListener ? mq.addEventListener("change", recolor) : mq.addListener(recolor);
+new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+controls.autoRotate = false;
+(function loop() { resize(); controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); })();
+</script>

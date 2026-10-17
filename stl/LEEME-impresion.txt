@@ -1,0 +1,22 @@
+SOPORTE DEL BIDÓN - NOTA PARA IMPRIMIR
+
+Material: PETG (aguanta humedad; PLA también sirve pero se ablanda al sol o con calor).
+Boquilla 0,4 mm, capa 0,2 mm, 4 perímetros, 25 % de relleno giroide.
+Todas las piezas entran en una cama de 220 x 220 mm.
+
+Piezas:
+1. soporte_principal.stl (162 x 105 x 172 mm). Ya viene orientado: el piso de la copa va sobre la cama.
+   Necesita soportes tipo árbol debajo del aro y del gancho. Es la única que lleva soportes.
+2. suplemento_A_60mm.stl (diámetro 94 x 60 mm). Para botellas de 1 L y de 500 ml.
+3. suplemento_B_40mm.stl (diámetro 86 x 40 mm). Para 500 ml, va encima del A.
+4. reductor_aro_1L.stl. Se calza dentro del aro en C para botellas de 1 L.
+5. reductor_aro_500ml.stl. Se calza dentro del aro en C para botellas de 500 ml.
+Las piezas 2 a 5 se imprimen tal como vienen, sin soportes.
+
+Uso:
+- 1,5 L: solo el soporte principal.
+- 1 L: suplemento A en la copa + reductor de 1 L en el aro.
+- 500 ml: suplemento A + suplemento B encima + reductor de 500 ml en el aro.
+
+soporte.py es el modelo paramétrico (Python con manifold3d). Cambiando los números
+del principio se regeneran todas las piezas.
